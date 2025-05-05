@@ -28,15 +28,19 @@ public class InsertAdminEvents extends BotPlugin {
             // 提取目标QQ号
             long targetQq = ExtractTargetQq.extractQqFromMessage(message);
             if (targetQq == 0) {
-                bot.sendGroupMsg(event.getGroupId(), "无法解析目标用户", false);
+                String sendMsg = MsgUtils.builder()
+                        .at(event.getUserId())
+                        .text("\n无法解析目标用户")
+                        .build();
+                bot.sendGroupMsg(event.getGroupId(), sendMsg, false);
                 return MESSAGE_IGNORE;
             }
 
             // 4. 调用授权服务
             String result = InsertAdminService.insertAdmin(senderId,targetQq);
             String sendMsg = MsgUtils.builder()
-                    .at(targetQq)
-                    .text(result)
+                    .at(event.getUserId())
+                    .text("\n" + result)
                     .build();
             // 5. 发送操作结果
             bot.sendGroupMsg(event.getGroupId(), sendMsg, false);

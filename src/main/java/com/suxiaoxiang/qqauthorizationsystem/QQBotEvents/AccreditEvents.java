@@ -31,7 +31,11 @@ public class AccreditEvents extends BotPlugin {
         if (message.startsWith(".授权")) {
             String[] parts = message.split(" ");
             if (parts.length < 2) {
-                bot.sendGroupMsg(event.getGroupId(), "指令格式错误，请使用：.授权<类型>@<目标用户>", false);
+                String sendMsg = MsgUtils.builder()
+                        .at(event.getUserId())
+                        .text("\n指令格式错误，请使用：.授权<类型>@<目标用户>")
+                        .build();
+                bot.sendGroupMsg(event.getGroupId(), sendMsg, false);
                 return MESSAGE_IGNORE;
             }
 
@@ -41,21 +45,30 @@ public class AccreditEvents extends BotPlugin {
             String pluginName = pluginParts[0].trim();
 
             if (pluginName.isEmpty()) {
-                bot.sendGroupMsg(event.getGroupId(), "插件名字不能为空", false);
+                String sendMsg = MsgUtils.builder()
+                        .at(event.getUserId())
+                        .text("\n插件名字不能为空")
+                        .build();
+                bot.sendGroupMsg(event.getGroupId(), sendMsg, false);
                 return MESSAGE_IGNORE;
             }
             // 提取目标QQ号
             long targetQq = ExtractTargetQq.extractQqFromMessage(message);
             if (targetQq == 0) {
-                bot.sendGroupMsg(event.getGroupId(), "无法解析目标用户", false);
+                String sendMsg = MsgUtils.builder()
+                        .at(event.getUserId())
+                        .text("\n无法解析目标用户")
+                        .build();
+                bot.sendGroupMsg(event.getGroupId(), sendMsg, false);
                 return MESSAGE_IGNORE;
             }
 
             // 调用授权服务
             String result = AccreditService.handleAuthCommand(senderId, targetQq, pluginName);
             String sendMsg = MsgUtils.builder()
+                    .at(event.getUserId())
+                    .text("\n" + result + "\n请注意查收授权结果\n")
                     .at(targetQq)
-                    .text("\n"+result+"\n请注意查收授权结果")
                     .build();
             bot.sendGroupMsg(event.getGroupId(), sendMsg, false);
         }

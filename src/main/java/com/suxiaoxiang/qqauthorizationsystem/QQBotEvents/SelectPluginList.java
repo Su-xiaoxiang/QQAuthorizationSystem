@@ -24,7 +24,8 @@ public class SelectPluginList extends BotPlugin {
 
     @Override
     public int onGroupMessage(Bot bot, GroupMessageEvent event) {
-        String message = event.getMessage(); // 获取消息内容
+        // 获取消息内容
+        String message = event.getMessage();
         GroupMessageEvent.GroupSender sender = event.getSender();
         long senderId = sender.getUserId();
 

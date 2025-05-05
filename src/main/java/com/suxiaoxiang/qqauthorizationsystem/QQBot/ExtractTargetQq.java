@@ -17,7 +17,7 @@ public class ExtractTargetQq {
         if (!atList.isEmpty()) {
             return atList.get(0);
         }
-
-        return 0; // 如果没有找到 @ 目标，返回0
+     // 如果没有找到 @ 目标，返回0
+        return 0;
     }
 }
